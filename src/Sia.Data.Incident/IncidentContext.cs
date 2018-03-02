@@ -10,8 +10,16 @@ namespace Sia.Data.Incidents
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Participant>()
+            modelBuilder
+                .Entity<Participant>()
                 .HasKey(participant => new { participant.Alias, participant.Team, participant.Role });
+            modelBuilder
+                .AddManyToManyAssociation<Event, AssociateEventToEngagement, Engagement>
+                (
+                    (ev) => ev.EngagementAssociations,
+                    (engagement) => engagement.EventAssociations
+                );
+
         }
 
         public DbSet<Incident> Incidents { get; set; }
@@ -20,5 +28,8 @@ namespace Sia.Data.Incidents
         public DbSet<Engagement> Engagements { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<AssociateEventToEngagement> AssociateEventsToEngagements { get; set; }
+        public DbSet<AssociateEventToTicket> AssociateEventsToTickets { get; set; }
+        public DbSet<AssociateEventToIncident> AssociateEventsTo { get; set; }
     }
 }

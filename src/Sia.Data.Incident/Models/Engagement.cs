@@ -1,5 +1,6 @@
 ﻿using Sia.Shared.Data;
 using System;
+using System.Collections.Generic;
 
 namespace Sia.Data.Incidents.Models
 {
@@ -10,5 +11,9 @@ namespace Sia.Data.Incidents.Models
         public DateTime TimeEngaged { get; set; }
         public DateTime? TimeDisengaged { get; set; }
         public Participant Participant { get; set; }
+        public ICollection<AssociateEventToEngagement> EventAssociations { get; set; }
+            = new HashSet<AssociateEventToEngagement>();
+        public ICollection<Event> Events
+            => new ManyToManyCollection<Engagement, AssociateEventToEngagement, Event>(this, EventAssociations);
     }
 }
